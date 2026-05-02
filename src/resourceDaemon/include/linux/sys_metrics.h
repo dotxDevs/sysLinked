@@ -28,20 +28,27 @@
 #include <stdbool.h>
 
 typedef struct
-{ 
-	uint64_t	rx_bytes;
-	uint64_t	rx_packets;
-	uint64_t	tx_packets;
-	uint64_t	tx_bytes;
-	
-	uint64_t	rx_errors;
-	uint64_t	rx_missed_errors;
-	uint64_t	rx_dropped;
+{
+    char        name[32];
 
-	uint64_t	tx_errors;
-	uint64_t	tx_missed_errors;
-	uint64_t	tx_dropped;
-}net_dev_stats;
+    uint64_t    rx_bytes;
+    uint64_t    rx_packets;
+    uint64_t    tx_bytes;
+    uint64_t    tx_packets;
+
+    uint64_t    rx_errors;
+    uint64_t    rx_dropped;
+    uint64_t    tx_errors;
+    uint64_t    tx_dropped;
+
+    bool        valid;
+}net_device_stat;
+
+typedef struct
+{
+    uint32_t        device_count;
+    net_device_stat devices[MAX_NET_DEVICES];
+}net_info;
 
 #endif
  
@@ -85,15 +92,24 @@ typedef struct
 #include <stdint.h>
 #include <stdbool.h>
 
-#define POWER_STATUS_LEN 32
+#define POWER_STATUS_LEN   	32
+#define MAX_POWER_SUPPLIES 	 8
 
 typedef struct
 {
-	uint8_t		capacity;
-	char		status[POWER_STATUS_LEN];
-	bool		valid;
-}power_supply_info;
+    char        name[32];
+    uint8_t     capacity;
+    char        status[POWER_STATUS_LEN];
 
+    bool        valid;
+}power_supply;
+
+typedef struct
+{
+    uint32_t        supply_count;
+    power_supply    supplies[MAX_POWER_SUPPLIES];
+
+}power_info;
 #endif
 
 /*
@@ -105,16 +121,27 @@ typedef struct
 #ifndef BLOCK_STAT_H
 #define BLOCK_STAT_H
 #include <stdint.h>
+#include <stdbool.h>
 
 typedef struct
 {
-	uint64_t	reads_completed;
-	uint64_t	sectors_read;
-	uint64_t	writes_completed;
+    char        name[32];
 
-	uint64_t	sectors_written;
-	uint64_t	inflight_ios;
-	uint64_t	io_time_ms;
-}block_stat;
+    uint64_t    reads_completed;
+    uint64_t    sectors_read;
+    uint64_t    writes_completed;
+
+    uint64_t    sectors_written;
+    uint64_t    inflight_ios;
+    uint64_t    io_time_ms;
+
+    bool        valid;
+}block_device_stat;
+
+typedef struct
+{
+    uint32_t            device_count;
+    block_device_stat   devices[MAX_BLOCK_DEVICES];
+}block_info;
 
 #endif
